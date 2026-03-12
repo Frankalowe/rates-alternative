@@ -147,8 +147,8 @@ function App() {
                 </div>
               </div>
               <div className="market-actions">
-                <button className="btn btn-block btn-buy">↗ Buy</button>
-                <button className="btn btn-block btn-sell-outline">↘ Sell</button>
+                <button className="btn btn-block btn-buy" onClick={() => openModal('buy', 'Tether +', '313.00', '100', '5,000', '3min', '#26A17B', '₮')}>↗ Buy</button>
+                <button className="btn btn-block btn-sell-outline" onClick={() => openModal('sell', 'Tether +', '310.00', '100', '5,000', '3min', '#26A17B', '₮')}>↘ Sell</button>
               </div>
             </div>
             {/* Skrill Card */}
@@ -186,8 +186,8 @@ function App() {
                 </div>
               </div>
               <div className="market-actions">
-                <button className="btn btn-block btn-buy">↗ Buy</button>
-                <button className="btn btn-block btn-sell-outline">↘ Sell</button>
+                <button className="btn btn-block btn-buy" onClick={() => openModal('buy', 'Skrill', '317.00', '100', '5,000', '2min', '#8b0a50', 'S')}>↗ Buy</button>
+                <button className="btn btn-block btn-sell-outline" onClick={() => openModal('sell', 'Skrill', '297.00', '100', '5,000', '2min', '#8b0a50', 'S')}>↘ Sell</button>
               </div>
             </div>
 
@@ -226,8 +226,8 @@ function App() {
                 </div>
               </div>
               <div className="market-actions">
-                <button className="btn btn-block btn-buy">↗ Buy</button>
-                <button className="btn btn-block btn-sell-outline">↘ Sell</button>
+                <button className="btn btn-block btn-buy" onClick={() => openModal('buy', 'Wise', '319.00', '50', '5,000', '3min', '#00b9ff', 'W')}>↗ Buy</button>
+                <button className="btn btn-block btn-sell-outline" onClick={() => openModal('sell', 'Wise', '309.00', '50', '5,000', '3min', '#00b9ff', 'W')}>↘ Sell</button>
               </div>
             </div>
           </div>
@@ -317,11 +317,23 @@ function App() {
                   </div>
                   <div className="summary-row">
                     <span>{modalState.type === 'buy' ? 'You Pay:' : 'You Sell:'}</span>
-                    <span className="summary-value dim">Enter amount</span>
+                    <span className={amount ? 'summary-value' : 'summary-value dim'}>
+                      {amount ? (
+                        modalState.type === 'buy'
+                          ? (parseFloat(amount) * parseFloat(modalState.rate)).toLocaleString('en-US', { style: 'currency', currency: 'LKR' })
+                          : `${amount} ${modalState.market === 'Tether +' ? 'USDT' : modalState.market}`
+                      ) : 'Enter amount'}
+                    </span>
                   </div>
                   <div className="summary-row">
                     <span>You Receive:</span>
-                    <span className="summary-value dim">Enter amount</span>
+                    <span className={amount ? 'summary-value' : 'summary-value dim'}>
+                      {amount ? (
+                        modalState.type === 'buy'
+                          ? `${amount} ${modalState.market === 'Tether +' ? 'USDT' : modalState.market}`
+                          : (parseFloat(amount) * parseFloat(modalState.rate)).toLocaleString('en-US', { style: 'currency', currency: 'LKR' })
+                      ) : 'Enter amount'}
+                    </span>
                   </div>
                 </div>
               </div>

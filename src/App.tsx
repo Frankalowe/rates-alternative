@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import Transaction from './Transaction'
 
 function App() {
   const [modalState, setModalState] = useState<{ isOpen: boolean, type: 'buy' | 'sell', market: string, rate: string, min: string, max: string, time: string, color: string, abbrev: string }>({
@@ -16,6 +17,8 @@ function App() {
 
   const [amount, setAmount] = useState('');
 
+  const [viewState, setViewState] = useState<'home' | 'transaction'>('home');
+
   const openModal = (type: 'buy' | 'sell', market: string, rate: string, min: string, max: string, time: string, color: string, abbrev: string) => {
     setModalState({ isOpen: true, type, market, rate, min, max, time, color, abbrev });
     setAmount('');
@@ -24,6 +27,77 @@ function App() {
   const closeModal = () => {
     setModalState(prev => ({ ...prev, isOpen: false }));
   };
+
+  const confirmTransaction = () => {
+    if (!amount) return;
+    setModalState(prev => ({ ...prev, isOpen: false }));
+    window.scrollTo(0, 0);
+    setViewState('transaction');
+  };
+
+  if (viewState === 'transaction') {
+    return (
+      <div className="app-container">
+        <header className="header">
+          <div className="container header-inner">
+            <div className="logo">
+              <span className="logo-icon">RK</span>
+              <span className="logo-text">FLRates.com</span>
+            </div>
+            <nav className="nav">
+              <a href="#" className="nav-link active" onClick={() => setViewState('home')}>Home</a>
+              <a href="#" className="nav-link">Transactions</a>
+              <a href="#" className="nav-link">About</a>
+              <a href="#" className="nav-link">App</a>
+              <a href="#" className="nav-link">Support</a>
+            </nav>
+            <div className="header-actions">
+              <div className="limit-info">
+                <span className="limit-label">Current limit:</span>
+                <span className="limit-value">LKR 100,000</span>
+              </div>
+              <div className="avatar">FL</div>
+            </div>
+          </div>
+        </header>
+        <Transaction
+          onBack={() => setViewState('home')}
+          market={modalState.market}
+          type={modalState.type}
+          amount={amount}
+          rate={modalState.rate}
+          color={modalState.color}
+          abbrev={modalState.abbrev}
+        />
+        <footer className="footer">
+          <div className="container footer-inner">
+            <div className="footer-col">
+              <div className="logo">
+                <span className="logo-icon">RK</span>
+                <span className="logo-text">FLRates.com</span>
+              </div>
+              <p>Sri Lanka's leading P2P exchange platform.</p>
+            </div>
+            <div className="footer-col">
+              <h4>Platform</h4>
+              <a href="#">Buy Crypto</a>
+              <a href="#">Sell Crypto</a>
+              <a href="#">Supported Markets</a>
+            </div>
+            <div className="footer-col">
+              <h4>Support</h4>
+              <a href="#">Help Center</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Privacy Policy</a>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>&copy; 2026 FLRates.com. All rights reserved.</p>
+          </div>
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
@@ -51,7 +125,7 @@ function App() {
         {/* Hero Section */}
         <section className="hero-section">
           <div className="container hero-inner">
-            <h1 className="hero-title">Welcome to Rates.LK</h1>
+            <h1 className="hero-title">Welcome to FLRates.com</h1>
             <p className="hero-subtitle">Sri Lanka's most trusted digital currency exchange platform. Experience seamless, secure transactions with competitive rates and professional service.</p>
 
             <div className="features-grid">
@@ -238,7 +312,7 @@ function App() {
       <footer className="footer">
         <div className="container footer-inner">
           <div className="footer-col">
-            <h3 className="footer-title">Rates.LK</h3>
+            <h3 className="footer-title">FLRates.com</h3>
             <p className="footer-desc">Sri Lanka's leading digital currency exchange platform.</p>
           </div>
           <div className="footer-col">
@@ -259,7 +333,7 @@ function App() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 Rates.LK. All rights reserved.</p>
+          <p>&copy; 2026 FLRates.com. All rights reserved.</p>
         </div>
       </footer>
 
@@ -355,7 +429,11 @@ function App() {
 
             <div className="modal-footer">
               <button className="btn btn-cancel" onClick={closeModal}>Cancel</button>
-              <button className={`btn btn-confirm ${modalState.type === 'buy' ? 'btn-confirm-buy' : 'btn-confirm-sell'}`}>
+              <button
+                className={`btn btn-confirm ${modalState.type === 'buy' ? 'btn-confirm-buy' : 'btn-confirm-sell'}`}
+                onClick={confirmTransaction}
+                disabled={!amount}
+              >
                 {modalState.type === 'buy' ? '↗ Confirm Buy' : '↘ Confirm Sell'}
               </button>
             </div>

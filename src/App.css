@@ -700,13 +700,27 @@
 .btn-confirm {
   flex: 1;
   color: white;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-confirm-buy {
   background-color: var(--color-success);
 }
 
+.btn-confirm-buy:hover:not(:disabled) {
+  background-color: #1e8766;
+}
+
 .btn-confirm-sell {
   background-color: #f77271;
   /* specific pink-red matching screenshot */
+}
+
+.btn-confirm-sell:hover:not(:disabled) {
+  background-color: #e65c5b;
 }
